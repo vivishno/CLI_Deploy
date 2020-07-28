@@ -16,9 +16,16 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    - name: Azure CLI script
+    - name: deploy ML workspace
       uses: azure/CLI@v1
       with:
         azcliversion: 2.9.1
         inlineScript: |
           az deployment group create --resource-group newR --template-file .cloud/.azure/arm_deploy.json --parameters .cloud/.azure/arm_deploy.params.json
+
+    - name: Deploy Function App
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.9.1
+        inlineScript: |
+          az deployment group create --resource-group newR --template-file .cloud/.azure/func_deploy.json --parameters .cloud/.azure/func.params.json
