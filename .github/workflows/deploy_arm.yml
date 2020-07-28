@@ -19,4 +19,4 @@ jobs:
       with:
         azcliversion: 2.0.78
         inlineScript: |
-          az account show
+          az deployment group create --resource-group newR --template-file /.cloud/.azure/arm_deploy.json --parameters /.cloud/.azure/arm_deploy.params.json
