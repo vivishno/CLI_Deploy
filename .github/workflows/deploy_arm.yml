@@ -17,11 +17,15 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: subscribe to events
+      id: azure_eventgridsubscriber
       uses: azure/CLI@v1
       with:
         azcliversion: 2.9.1 
         inlineScript: |
             az eventgrid system-topic create -g newR -n sampletopic2 --location eastus --topic-type Microsoft.MachineLearningServices.workspaces \
             --source /subscriptions/c00d16c7-6c1f-4c03-9be1-6934a4c49682/resourceGroups/newR/providers/Microsoft.MachineLearningServices/workspaces/amlconfigureTest2
-
+             
+    - name: Display subscription endpoint
+      run: |
+        echo subscription-endpoint: ${{ steps.azure_eventgridsubscriber.outputs }}
 
