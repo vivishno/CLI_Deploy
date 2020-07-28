@@ -22,10 +22,9 @@ jobs:
       with:
         azcliversion: 2.9.1 
         inlineScript: |
-            az eventgrid system-topic create -g newR -n sampletopic2 --location eastus --topic-type Microsoft.MachineLearningServices.workspaces \
-            --source /subscriptions/c00d16c7-6c1f-4c03-9be1-6934a4c49682/resourceGroups/newR/providers/Microsoft.MachineLearningServices/workspaces/amlconfigureTest2
+            az deployment group create --resource-group newR --template-file .cloud/.azure/func_deploy.json --parameters .cloud/.azure/func.params.json
              
     - name: Display subscription endpoint
       run: |
-        echo subscription-endpoint: ${{ steps.azure_eventgridsubscriber.outputs }}
+        echo subscription-endpoint: ${{ steps.azure_eventgridsubscriber.outputs.properties.outputs.hostKey.value }}
 
