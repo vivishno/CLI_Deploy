@@ -29,3 +29,11 @@ jobs:
         azcliversion: 2.9.1
         inlineScript: |
           az deployment group create --resource-group newR --template-file .cloud/.azure/func_deploy.json --parameters .cloud/.azure/func.params.json
+
+
+    - name: subscribe to events
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.9.1
+        inlineScript: |
+          az eventgrid system-topic create -g newR -n sampletopic --location westus2 --topic-type microsoft.machineLearningServices/workspaces --source /subscriptions/c00d16c7-6c1f-4c03-9be1-6934a4c49682/resourceGroups/newR/providers/Microsoft.MachineLearningServices/workspaces/amlconfigureTest2
