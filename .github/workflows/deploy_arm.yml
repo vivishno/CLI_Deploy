@@ -26,5 +26,5 @@ jobs:
              
     - name: Display subscription endpoint
       run: |
-        echo subscription-endpoint: ${{ toJson(steps.azure_eventgridsubscriber.outputs) }}
+        echo subscription-endpoint: ${{ steps.azure_eventgridsubscriber.outputs.id}}
 
