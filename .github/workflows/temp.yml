@@ -1,0 +1,40 @@
+
+on: [push]
+
+name: AzureCLISample
+
+jobs:
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+          
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: deploy ML workspace
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.9.1
+        inlineScript: |
+          az deployment group create --resource-group newR --template-file .cloud/.azure/arm_deploy.json --parameters .cloud/.azure/arm_deploy.params.json
+
+    - name: Deploy Function App
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.9.1
+        inlineScript: |
+          az deployment group create --resource-group newR --template-file .cloud/.azure/func_deploy.json --parameters .cloud/.azure/func.params.json
+
+
+    - name: subscribe to events
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.9.1
+        inlineScript: |
+			    az eventgrid system-topic create -g newR -n sampletopic --location eastus --topic-type Microsoft.MachineLearningServices.workspaces --source /subscriptions/c00d16c7-6c1f-4c03-9be1-6934a4c49682/resourceGroups/newR/providers/Microsoft.MachineLearningServices/workspaces/amlconfigureTest2
+          az eventgrid system-topic event-subscription create --name es1 -g newR --system-topic-name sampletopic --endpoint https://amlconfigurenewwihi6.azurewebsites.net/api/generic_triggers?code=jrPlY/lXEA/WaMjfJNqdrdwhBFLNTKx/4htacR7kyFWPYqXtb2Lldg==
