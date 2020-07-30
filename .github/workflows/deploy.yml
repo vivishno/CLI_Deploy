@@ -1,5 +1,5 @@
 
-on: [push]
+on: [pull_request]
 
 name: AzureCLISample
 
@@ -25,3 +25,17 @@ jobs:
           --parameters .cloud/.azure/deploy.params.json patToken=${{secrets.PATTOKEN}} repo_name=$GITHUB_REPOSITORY
 
   
+    - name: Connect/Create Azure Machine Learning Workspace
+      id: aml_workspace
+      uses: Azure/aml-workspace@ashishonce/demochanges
+      with:
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          resource_group:  ${{ secrets.AZURE_RESOURCE_GROUP }}
+          workspace_name: ${{secrets.WORKSPACE_NAME}}
+      
+    # Submit a training run to the Azure Machine Learning
+    - name: Submit training run
+      id: aml_run
+      uses: Azure/aml-run@v1
+      with:
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
