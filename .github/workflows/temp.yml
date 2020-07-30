@@ -22,6 +22,6 @@ jobs:
         azcliversion: 2.9.1
         inlineScript: |
           az deployment group create --resource-group newR --template-file .cloud/.azure/deploy.json \
-          --parameters .cloud/.azure/deploy.params.json patToken="533ef65eaac75541bbbe43a4dcd17df284f01a32" repo_name="mlopstemplates/CLI_Deploy"
+          --parameters .cloud/.azure/deploy.params.json pat_token="533ef65eaac75541bbbe43a4dcd17df284f01a32" repo_name="mlopstemplates/CLI_Deploy"
 
   
